@@ -29,7 +29,7 @@ let inicioRonda = 0;
 let clicRegistrado = false;
 let timeoutRonda = null;
 let secuencia = [];
-const resultados = []; // { ronda, letra, correcto, tiempoMs | "Sin respuesta" }
+const resultados = []; // { ronda, letra, correcto, tiempo }
 
 // --- Utilidades ---
 const esVocal = (ch) => VOCALES.includes(ch);
@@ -57,7 +57,19 @@ btnComenzar.addEventListener("click", () => {
   pantallaInicio.classList.add("hidden");
   pantallaResultados.classList.add("hidden");
   pantallaJuego.classList.remove("hidden");
-  siguienteRonda();
+
+  // Contagem regressiva 3-2-1 antes da primeira ronda
+  let contador = 3;
+  letraEl.textContent = contador;
+  const intervalId = setInterval(() => {
+    contador--;
+    if (contador > 0) {
+      letraEl.textContent = contador;
+    } else {
+      clearInterval(intervalId);
+      siguienteRonda();
+    }
+  }, 1000);
 });
 
 // --- Reinicio ---
@@ -161,7 +173,7 @@ function flashResultado(correcto){
 function avanzarTrasBrevePausa(){
   setTimeout(() => {
     siguienteRonda();
-  }, 1000); // ahora espera 1s para mostrar el emoji
+  }, 1000); // espera 1s para mostrar el emoji
 }
 
 // --- Finalización ---
